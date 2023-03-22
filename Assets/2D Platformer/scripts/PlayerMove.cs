@@ -18,7 +18,7 @@ public class PlayerMove : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
-    //단발적인 키입력에 적합
+    //Suitable For Instant Input
     void Update()
     {
         //Jump
@@ -86,8 +86,22 @@ public class PlayerMove : MonoBehaviour
         //Collision With Enemy
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            OnDamaged(collision.transform.position);
+            if(rigid.velocity.y < 0 && transform.position.y > collision.transform.position.y)
+            {
+                JumpAttack(collision.transform);
+                rigid.AddForce(Vector2.up * jumpPower*0.5f, ForceMode2D.Impulse);
+                anim.SetBool("is jump", true);
+            }
+            else
+                OnDamaged(collision.transform.position);
         }
+    }
+
+    void JumpAttack(Transform enemy)
+    {
+        //Road EnemyMove.cs
+        EnemyMove enemyMove = enemy.GetComponent<EnemyMove>();
+        enemyMove.OnDamaged();
     }
     void OnDamaged(Vector2 targetPos)
     {

@@ -1,10 +1,11 @@
 using UnityEngine;
 
-public class EnenmyMove : MonoBehaviour
+public class EnemyMove : MonoBehaviour
 {
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     Animator anim;
+    CapsuleCollider2D capsuleCollider;
     public int nextMove;
     public float nextThinktime;
 
@@ -13,6 +14,7 @@ public class EnenmyMove : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
         ThinkAI();
     }
     void FixedUpdate()
@@ -62,5 +64,17 @@ public class EnenmyMove : MonoBehaviour
     {
         CancelInvoke();
         ThinkAI();
+    }
+    public void OnDamaged()
+    {
+        spriteRenderer.color = new Color(1, 1, 1, 0.4f);
+        spriteRenderer.flipY = true;
+        capsuleCollider.enabled = false;
+        rigid.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+        Invoke(nameof(DeActive), 5);
+    }
+    void DeActive()
+    {
+        gameObject.SetActive(false);
     }
 }
