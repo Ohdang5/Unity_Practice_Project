@@ -89,7 +89,7 @@ public class PlayerMove : MonoBehaviour
             if(rigid.velocity.y < 0 && transform.position.y > collision.transform.position.y)
             {
                 JumpAttack(collision.transform);
-                rigid.AddForce(Vector2.up * jumpPower*0.5f, ForceMode2D.Impulse);
+                OnTheEnemy();
                 anim.SetBool("is jump", true);
             }
             else
@@ -100,21 +100,28 @@ public class PlayerMove : MonoBehaviour
             OnDamaged(collision.transform.position);
         }
     }
-
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Item"))
-        {
-            collision.gameObject.SetActive(false);
-        }
-    }
-
     void JumpAttack(Transform enemy)
     {
         //Road EnemyMove.cs
         EnemyMove enemyMove = enemy.GetComponent<EnemyMove>();
         enemyMove.OnDamaged();
     }
+
+    void OnTheEnemy()
+    {
+        //On The Enemy, Little Jump
+        rigid.AddForce(0.5f * jumpPower * Vector2.up, ForceMode2D.Impulse);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!collision.gameObject.CompareTag("Item"))
+        {
+            return;
+        }
+        collision.gameObject.SetActive(false);
+    }
+
     void OnDamaged(Vector2 targetPos)
     {
         anim.SetTrigger("is damaged");
