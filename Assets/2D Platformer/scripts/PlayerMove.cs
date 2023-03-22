@@ -95,6 +95,18 @@ public class PlayerMove : MonoBehaviour
             else
                 OnDamaged(collision.transform.position);
         }
+        else if (collision.gameObject.CompareTag("Spike"))
+        {
+            OnDamaged(collision.transform.position);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Item"))
+        {
+            collision.gameObject.SetActive(false);
+        }
     }
 
     void JumpAttack(Transform enemy)

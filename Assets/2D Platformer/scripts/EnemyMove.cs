@@ -30,7 +30,12 @@ public class EnemyMove : MonoBehaviour
         //Turn If Edge
         if (rayHit.collider == null)
         {
-            Turn();
+            if (spriteRenderer.flipY != true)
+            {
+                Turn();
+            }
+            else
+                Invoke(nameof(DeActive), 5);
         }
 
     }
@@ -71,9 +76,8 @@ public class EnemyMove : MonoBehaviour
         spriteRenderer.flipY = true;
         capsuleCollider.enabled = false;
         rigid.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
-        Invoke(nameof(DeActive), 5);
     }
-    void DeActive()
+    public void DeActive()
     {
         gameObject.SetActive(false);
     }
